@@ -1,0 +1,83 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ctl="using:Citadels.App.Controls"
+             x:Class="Citadels.App.Views.SetupView">
+
+  <ScrollViewer VerticalScrollBarVisibility="Auto">
+    <Grid RowDefinitions="*,Auto,*,Auto" MinHeight="660">
+
+      <StackPanel Grid.Row="1" Width="540" Spacing="22" HorizontalAlignment="Center">
+
+        <!-- Title -->
+        <StackPanel Spacing="6" HorizontalAlignment="Center">
+          <ctl:GameIcon Data="{x:Static ctl:Icons.Castle}" Foreground="{StaticResource GoldSolidBrush}"
+                        Width="64" Height="64" HorizontalAlignment="Center" />
+          <TextBlock Classes="wordmark" Text="CITADELS" FontSize="56" HorizontalAlignment="Center" />
+          <TextBlock Classes="subtle" Text="Build the most magnificent city. Choose a new character every round."
+                     FontSize="14" HorizontalAlignment="Center" TextAlignment="Center" TextWrapping="Wrap" />
+        </StackPanel>
+
+        <!-- The form -->
+        <Border Classes="glass" Padding="28,24">
+          <StackPanel Spacing="20">
+
+            <StackPanel Spacing="10">
+              <TextBlock Classes="eyebrow" Text="NUMBER OF PLAYERS" />
+              <ListBox Classes="chips" ItemsSource="{Binding PlayerCounts}" SelectedItem="{Binding PlayerCount}">
+                <ListBox.ItemsPanel>
+                  <ItemsPanelTemplate>
+                    <StackPanel Orientation="Horizontal" />
+                  </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
+              </ListBox>
+            </StackPanel>
+
+            <StackPanel Spacing="10">
+              <TextBlock Classes="eyebrow" Text="PLAYERS, IN SEAT ORDER" />
+              <ItemsControl ItemsSource="{Binding Names}">
+                <ItemsControl.ItemTemplate>
+                  <DataTemplate>
+                    <Grid ColumnDefinitions="Auto,*" Margin="0,0,0,8">
+                      <Border Grid.Column="0" Width="38" Height="38" CornerRadius="19"
+                              Background="{Binding SeatBrush}" Margin="0,0,12,0" VerticalAlignment="Center">
+                        <TextBlock Text="{Binding Initial}" FontWeight="Bold" FontSize="16" Foreground="#0B1020"
+                                   HorizontalAlignment="Center" VerticalAlignment="Center" />
+                      </Border>
+                      <TextBox Grid.Column="1" Classes="glass" Text="{Binding Name, Mode=TwoWay}"
+                               Watermark="{Binding Label}" MaxLength="20" />
+                    </Grid>
+                  </DataTemplate>
+                </ItemsControl.ItemTemplate>
+              </ItemsControl>
+              <TextBlock Text="The first player starts with the crown. Everybody plays on this computer and passes it on when asked."
+                         Classes="muted" FontSize="12" TextWrapping="Wrap" />
+            </StackPanel>
+
+            <TextBlock Text="{Binding ValidationMessage}" Foreground="#F5B35A" TextWrapping="Wrap"
+                       IsVisible="{Binding ValidationMessage, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+
+            <Button Classes="gold" Command="{Binding StartCommand}" HorizontalAlignment="Stretch" Padding="0,14">
+              <StackPanel Orientation="Horizontal" Spacing="10" HorizontalAlignment="Center">
+                <ctl:GameIcon Data="{x:Static ctl:Icons.Crown}" Foreground="{StaticResource GoldInkBrush}"
+                              Width="20" Height="20" VerticalAlignment="Center" />
+                <TextBlock Text="Start the game" FontSize="16" FontWeight="Bold" VerticalAlignment="Center" />
+              </StackPanel>
+            </Button>
+
+            <Border IsVisible="{Binding HasStartError}" Background="#26FF6B6B" BorderBrush="#66FF6B6B"
+                    BorderThickness="1" CornerRadius="12" Padding="14,12">
+              <TextBlock Text="{Binding StartError}" TextWrapping="Wrap" FontSize="13" />
+            </Border>
+
+          </StackPanel>
+        </Border>
+      </StackPanel>
+
+      <!-- Credits for the artwork and fonts -->
+      <TextBlock Grid.Row="3" Classes="muted" FontSize="11" Margin="0,24,0,18"
+                 HorizontalAlignment="Center" TextAlignment="Center" TextWrapping="Wrap" MaxWidth="700"
+                 Text="Icons by Lorc and Delapouite, game-icons.net, CC BY 3.0  ·  Fonts: Cinzel and Inter, SIL Open Font License  ·  A fan-made version, not affiliated with the publishers of Citadels." />
+    </Grid>
+  </ScrollViewer>
+
+</UserControl>

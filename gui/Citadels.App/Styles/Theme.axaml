@@ -1,0 +1,328 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+  <!-- ===================================================================================
+       "Dark fantasy glass": night-blue background, frosted panels, gold accents,
+       Cinzel for titles and card names, Inter for everything else.
+       =================================================================================== -->
+
+  <Styles.Resources>
+    <FontFamily x:Key="DisplayFont">avares://Citadels/Assets/Fonts#Cinzel</FontFamily>
+    <FontFamily x:Key="BodyFont">avares://Citadels/Assets/Fonts#Inter</FontFamily>
+
+    <SolidColorBrush x:Key="TextBrush" Color="#EEF1FA" />
+    <SolidColorBrush x:Key="SubtleTextBrush" Color="#C9CFE4" />
+    <SolidColorBrush x:Key="MutedTextBrush" Color="#8A92B0" />
+    <SolidColorBrush x:Key="GoldSolidBrush" Color="#F2C14E" />
+    <SolidColorBrush x:Key="GoldTextBrush" Color="#F5D58A" />
+    <SolidColorBrush x:Key="GoldInkBrush" Color="#241703" />
+
+    <LinearGradientBrush x:Key="BackgroundBrush" StartPoint="0%,0%" EndPoint="100%,100%">
+      <GradientStop Color="#070B18" Offset="0" />
+      <GradientStop Color="#10142E" Offset="0.55" />
+      <GradientStop Color="#170E30" Offset="1" />
+    </LinearGradientBrush>
+
+    <LinearGradientBrush x:Key="GoldBrush" StartPoint="0%,0%" EndPoint="0%,100%">
+      <GradientStop Color="#FFD978" Offset="0" />
+      <GradientStop Color="#D99A2B" Offset="1" />
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="GoldHoverBrush" StartPoint="0%,0%" EndPoint="0%,100%">
+      <GradientStop Color="#FFE7A3" Offset="0" />
+      <GradientStop Color="#E9AE3E" Offset="1" />
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="GoldPressedBrush" StartPoint="0%,0%" EndPoint="0%,100%">
+      <GradientStop Color="#E9B95A" Offset="0" />
+      <GradientStop Color="#B97E1C" Offset="1" />
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="GoldBarBrush" StartPoint="0%,0%" EndPoint="100%,0%">
+      <GradientStop Color="#F2C14E" Offset="0" />
+      <GradientStop Color="#FFE7A3" Offset="1" />
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="WordmarkBrush" StartPoint="0%,0%" EndPoint="0%,100%">
+      <GradientStop Color="#FFEDB8" Offset="0" />
+      <GradientStop Color="#D99A2B" Offset="1" />
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="GlassBrush" StartPoint="0%,0%" EndPoint="0%,100%">
+      <GradientStop Color="#14FFFFFF" Offset="0" />
+      <GradientStop Color="#09FFFFFF" Offset="1" />
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="OverlayBrush" StartPoint="0%,0%" EndPoint="100%,100%">
+      <GradientStop Color="#FA0A0E1F" Offset="0" />
+      <GradientStop Color="#FA1B1038" Offset="1" />
+    </LinearGradientBrush>
+    <RadialGradientBrush x:Key="GemBrush" GradientOrigin="35%,30%" Center="35%,30%">
+      <GradientStop Color="#FFF1BF" Offset="0" />
+      <GradientStop Color="#E2A83A" Offset="0.6" />
+      <GradientStop Color="#9A6512" Offset="1" />
+    </RadialGradientBrush>
+  </Styles.Resources>
+
+  <!-- ===== Base text ===== -->
+  <Style Selector="Window">
+    <Setter Property="FontFamily" Value="{StaticResource BodyFont}" />
+    <Setter Property="Foreground" Value="{StaticResource TextBrush}" />
+    <Setter Property="Background" Value="#070B18" />
+  </Style>
+  <Style Selector="ToolTip">
+    <Setter Property="FontFamily" Value="{StaticResource BodyFont}" />
+    <Setter Property="Background" Value="#F0161B33" />
+    <Setter Property="BorderBrush" Value="#33F2C14E" />
+    <Setter Property="Foreground" Value="{StaticResource TextBrush}" />
+    <Setter Property="CornerRadius" Value="10" />
+    <Setter Property="Padding" Value="12,8" />
+    <Setter Property="MaxWidth" Value="320" />
+  </Style>
+
+  <Style Selector="TextBlock.display">
+    <Setter Property="FontFamily" Value="{StaticResource DisplayFont}" />
+    <Setter Property="FontWeight" Value="Bold" />
+  </Style>
+  <Style Selector="TextBlock.wordmark">
+    <Setter Property="FontFamily" Value="{StaticResource DisplayFont}" />
+    <Setter Property="FontWeight" Value="Bold" />
+    <Setter Property="LetterSpacing" Value="6" />
+    <Setter Property="Foreground" Value="{StaticResource WordmarkBrush}" />
+  </Style>
+  <!-- Small capitals line above a title: "YOUR MOVE", "CHRONICLE" -->
+  <Style Selector="TextBlock.eyebrow">
+    <Setter Property="FontSize" Value="11" />
+    <Setter Property="FontWeight" Value="SemiBold" />
+    <Setter Property="LetterSpacing" Value="2" />
+    <Setter Property="Foreground" Value="{StaticResource GoldSolidBrush}" />
+  </Style>
+  <Style Selector="TextBlock.subtle">
+    <Setter Property="Foreground" Value="{StaticResource SubtleTextBrush}" />
+  </Style>
+  <Style Selector="TextBlock.muted">
+    <Setter Property="Foreground" Value="{StaticResource MutedTextBrush}" />
+  </Style>
+
+  <!-- ===== Frosted panels ===== -->
+  <Style Selector="Border.glass">
+    <Setter Property="Background" Value="{StaticResource GlassBrush}" />
+    <Setter Property="BorderBrush" Value="#1FFFFFFF" />
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="CornerRadius" Value="18" />
+    <Setter Property="BoxShadow" Value="0 20 50 -20 #AA000000" />
+  </Style>
+
+  <!-- The player whose turn it is glows in gold. -->
+  <Style Selector="Border.player">
+    <Setter Property="Transitions">
+      <Transitions>
+        <BrushTransition Property="BorderBrush" Duration="0:0:0.3" />
+        <BoxShadowsTransition Property="BoxShadow" Duration="0:0:0.3" />
+      </Transitions>
+    </Setter>
+  </Style>
+  <Style Selector="Border.player.active">
+    <Setter Property="BorderBrush" Value="#AAF2C14E" />
+    <Setter Property="BoxShadow" Value="0 0 30 -6 #88F2C14E" />
+  </Style>
+
+  <!-- Rounded "pill" with an icon and a short text (top bar, badges). -->
+  <Style Selector="Border.pill">
+    <Setter Property="Background" Value="#12FFFFFF" />
+    <Setter Property="BorderBrush" Value="#1FFFFFFF" />
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="CornerRadius" Value="999" />
+    <Setter Property="Padding" Value="13,7" />
+  </Style>
+  <Style Selector="Border.crownBadge">
+    <Setter Property="Background" Value="{StaticResource GoldBrush}" />
+    <Setter Property="CornerRadius" Value="999" />
+    <Setter Property="Padding" Value="8,2" />
+    <Setter Property="VerticalAlignment" Value="Center" />
+  </Style>
+
+  <!-- ===== Cards: fade in when they appear, lift when the mouse is on them ===== -->
+  <Style Selector="Border.card">
+    <Setter Property="RenderTransform" Value="translateY(0px)" />
+    <Setter Property="Transitions">
+      <Transitions>
+        <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.18" Easing="CubicEaseOut" />
+      </Transitions>
+    </Setter>
+    <Style.Animations>
+      <Animation Duration="0:0:0.35" Easing="CubicEaseOut" FillMode="Forward">
+        <KeyFrame Cue="0%">
+          <Setter Property="Opacity" Value="0" />
+        </KeyFrame>
+        <KeyFrame Cue="100%">
+          <Setter Property="Opacity" Value="1" />
+        </KeyFrame>
+      </Animation>
+    </Style.Animations>
+  </Style>
+  <Style Selector="Border.card:pointerover">
+    <Setter Property="RenderTransform" Value="translateY(-8px)" />
+  </Style>
+
+  <!-- ===== Overlays (pass the computer, game over) fade in ===== -->
+  <Style Selector="Border.overlay[IsVisible=True]">
+    <Style.Animations>
+      <Animation Duration="0:0:0.3" Easing="CubicEaseOut" FillMode="Forward">
+        <KeyFrame Cue="0%">
+          <Setter Property="Opacity" Value="0" />
+        </KeyFrame>
+        <KeyFrame Cue="100%">
+          <Setter Property="Opacity" Value="1" />
+        </KeyFrame>
+      </Animation>
+    </Style.Animations>
+  </Style>
+
+  <!-- The question panel fades in when a new question arrives. -->
+  <Style Selector="Border.question[IsVisible=True]">
+    <Style.Animations>
+      <Animation Duration="0:0:0.28" Easing="CubicEaseOut" FillMode="Forward">
+        <KeyFrame Cue="0%">
+          <Setter Property="Opacity" Value="0" />
+        </KeyFrame>
+        <KeyFrame Cue="100%">
+          <Setter Property="Opacity" Value="1" />
+        </KeyFrame>
+      </Animation>
+    </Style.Animations>
+  </Style>
+
+  <!-- ===== Gold button: the main action ===== -->
+  <Style Selector="Button.gold">
+    <Setter Property="Background" Value="{StaticResource GoldBrush}" />
+    <Setter Property="Foreground" Value="{StaticResource GoldInkBrush}" />
+    <Setter Property="BorderThickness" Value="0" />
+    <Setter Property="CornerRadius" Value="14" />
+    <Setter Property="Padding" Value="30,12" />
+    <Setter Property="FontWeight" Value="Bold" />
+    <Setter Property="FontSize" Value="15" />
+    <Setter Property="HorizontalContentAlignment" Value="Center" />
+  </Style>
+  <Style Selector="Button.gold:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="{StaticResource GoldHoverBrush}" />
+    <Setter Property="Foreground" Value="{StaticResource GoldInkBrush}" />
+  </Style>
+  <Style Selector="Button.gold:pressed /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="{StaticResource GoldPressedBrush}" />
+    <Setter Property="Foreground" Value="{StaticResource GoldInkBrush}" />
+  </Style>
+  <Style Selector="Button.gold:disabled /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="#22FFFFFF" />
+    <Setter Property="Foreground" Value="#66FFFFFF" />
+  </Style>
+
+  <!-- ===== Answer buttons of a question ===== -->
+  <Style Selector="Button.option">
+    <Setter Property="Background" Value="#10FFFFFF" />
+    <Setter Property="BorderBrush" Value="#24FFFFFF" />
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="CornerRadius" Value="12" />
+    <Setter Property="Padding" Value="14,11" />
+    <Setter Property="HorizontalAlignment" Value="Stretch" />
+    <Setter Property="HorizontalContentAlignment" Value="Left" />
+    <Setter Property="Foreground" Value="{StaticResource TextBrush}" />
+    <Setter Property="FontWeight" Value="SemiBold" />
+    <Setter Property="FontSize" Value="14" />
+  </Style>
+  <Style Selector="Button.option:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="#22F2C14E" />
+    <Setter Property="BorderBrush" Value="#F2C14E" />
+    <Setter Property="Foreground" Value="White" />
+  </Style>
+  <Style Selector="Button.option:pressed /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="#38F2C14E" />
+    <Setter Property="BorderBrush" Value="#F2C14E" />
+    <Setter Property="Foreground" Value="White" />
+  </Style>
+  <!-- "Back", "Done", "End turn": still clickable, but quieter -->
+  <Style Selector="Button.option.muted">
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="Foreground" Value="{StaticResource SubtleTextBrush}" />
+    <Setter Property="FontWeight" Value="Medium" />
+  </Style>
+
+  <!-- ===== Text boxes ===== -->
+  <Style Selector="TextBox.glass">
+    <Setter Property="Background" Value="#10FFFFFF" />
+    <Setter Property="BorderBrush" Value="#24FFFFFF" />
+    <Setter Property="Foreground" Value="{StaticResource TextBrush}" />
+    <Setter Property="CornerRadius" Value="10" />
+    <Setter Property="Padding" Value="12,9" />
+    <Setter Property="FontSize" Value="14" />
+    <Setter Property="CaretBrush" Value="{StaticResource GoldSolidBrush}" />
+    <Setter Property="SelectionBrush" Value="#66F2C14E" />
+  </Style>
+  <Style Selector="TextBox.glass:pointerover /template/ Border#PART_BorderElement">
+    <Setter Property="Background" Value="#18FFFFFF" />
+    <Setter Property="BorderBrush" Value="#40FFFFFF" />
+  </Style>
+  <Style Selector="TextBox.glass:focus /template/ Border#PART_BorderElement">
+    <Setter Property="Background" Value="#1CFFFFFF" />
+    <Setter Property="BorderBrush" Value="#F2C14E" />
+  </Style>
+  <Style Selector="TextBox.glass:focus">
+    <Setter Property="Foreground" Value="{StaticResource TextBrush}" />
+  </Style>
+
+  <!-- ===== Player-count chips on the setup screen (a ListBox) ===== -->
+  <Style Selector="ListBox.chips">
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="BorderThickness" Value="0" />
+    <Setter Property="Padding" Value="0" />
+  </Style>
+  <Style Selector="ListBox.chips ListBoxItem">
+    <Setter Property="Width" Value="48" />
+    <Setter Property="Height" Value="44" />
+    <Setter Property="Margin" Value="0,0,8,0" />
+    <Setter Property="Padding" Value="0" />
+    <Setter Property="CornerRadius" Value="12" />
+    <Setter Property="HorizontalContentAlignment" Value="Center" />
+    <Setter Property="VerticalContentAlignment" Value="Center" />
+    <Setter Property="FontSize" Value="16" />
+    <Setter Property="FontWeight" Value="SemiBold" />
+    <Setter Property="Foreground" Value="{StaticResource SubtleTextBrush}" />
+    <Setter Property="Background" Value="#10FFFFFF" />
+    <Setter Property="BorderBrush" Value="#24FFFFFF" />
+    <Setter Property="BorderThickness" Value="1" />
+  </Style>
+  <Style Selector="ListBox.chips ListBoxItem /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="CornerRadius" Value="12" />
+  </Style>
+  <Style Selector="ListBox.chips ListBoxItem:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="#22F2C14E" />
+    <Setter Property="BorderBrush" Value="#F2C14E" />
+    <Setter Property="Foreground" Value="White" />
+  </Style>
+  <Style Selector="ListBox.chips ListBoxItem:selected /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="{StaticResource GoldBrush}" />
+    <Setter Property="BorderBrush" Value="Transparent" />
+    <Setter Property="Foreground" Value="{StaticResource GoldInkBrush}" />
+  </Style>
+  <Style Selector="ListBox.chips ListBoxItem:selected:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="{StaticResource GoldHoverBrush}" />
+    <Setter Property="Foreground" Value="{StaticResource GoldInkBrush}" />
+  </Style>
+  <Style Selector="ListBox.chips ListBoxItem:selected:focus /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="{StaticResource GoldBrush}" />
+    <Setter Property="Foreground" Value="{StaticResource GoldInkBrush}" />
+  </Style>
+  <Style Selector="ListBox.chips ListBoxItem:pressed /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="{StaticResource GoldPressedBrush}" />
+    <Setter Property="Foreground" Value="{StaticResource GoldInkBrush}" />
+  </Style>
+
+  <!-- ===== Progress bar of a city (districts built out of 8) ===== -->
+  <Style Selector="ProgressBar.city">
+    <Setter Property="Foreground" Value="{StaticResource GoldBarBrush}" />
+    <Setter Property="Background" Value="#16FFFFFF" />
+    <Setter Property="Height" Value="5" />
+    <Setter Property="MinHeight" Value="5" />
+    <Setter Property="CornerRadius" Value="3" />
+  </Style>
+
+  <!-- ===== Scroll bars: thin and dark ===== -->
+  <Style Selector="ScrollBar">
+    <Setter Property="Opacity" Value="0.6" />
+  </Style>
+
+</Styles>

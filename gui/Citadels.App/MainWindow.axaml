@@ -1,0 +1,34 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="Citadels.App.MainWindow"
+        Title="Citadels"
+        Width="1320" Height="860"
+        MinWidth="1040" MinHeight="680"
+        WindowStartupLocation="CenterScreen">
+
+  <Grid Background="{StaticResource BackgroundBrush}">
+
+    <!-- Soft coloured light in two corners; purely decorative. -->
+    <Ellipse Width="1300" Height="900" Margin="-420,-480,0,0"
+             HorizontalAlignment="Left" VerticalAlignment="Top" IsHitTestVisible="False">
+      <Ellipse.Fill>
+        <RadialGradientBrush>
+          <GradientStop Color="#702B1F6B" Offset="0" />
+          <GradientStop Color="#002B1F6B" Offset="1" />
+        </RadialGradientBrush>
+      </Ellipse.Fill>
+    </Ellipse>
+    <Ellipse Width="1100" Height="800" Margin="0,0,-380,-420"
+             HorizontalAlignment="Right" VerticalAlignment="Bottom" IsHitTestVisible="False">
+      <Ellipse.Fill>
+        <RadialGradientBrush>
+          <GradientStop Color="#604A1D5E" Offset="0" />
+          <GradientStop Color="#004A1D5E" Offset="1" />
+        </RadialGradientBrush>
+      </Ellipse.Fill>
+    </Ellipse>
+
+    <ContentControl Content="{Binding Current}" />
+  </Grid>
+
+</Window>

@@ -1,0 +1,99 @@
+name: Build
+
+# Builds the C++ engine and the C# GUI on Windows and macOS, runs the C# tests (including one that
+# plays the real engine), and makes one downloadable archive per platform.
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: ${{ matrix.name }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: Windows
+            os: windows-latest
+            rid: win-x64
+            archive: Citadels-windows-x64.zip
+          - name: macOS
+            os: macos-latest
+            rid: osx-arm64
+            archive: Citadels-macos-arm64.tar.gz
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Build the C++ engine
+        run: |
+          cmake -B build -DCMAKE_BUILD_TYPE=Release -DSANITIZER=none
+          cmake --build build --config Release
+
+      # The tests/ folder is not part of the published repository; run them only where it exists.
+      - name: Run the C++ tests
+        run: |
+          if [ -d tests ]; then ctest --test-dir build -C Release --output-on-failure; else echo "no tests/ folder, skipped"; fi
+
+      - name: Put the engine and its data in one folder
+        run: |
+          mkdir -p dist/engine/data
+          if   [ -f build/Release/citadels.exe ]; then cp build/Release/citadels.exe dist/engine/
+          elif [ -f build/citadels.exe ];         then cp build/citadels.exe dist/engine/
+          else                                         cp build/citadels dist/engine/
+          fi
+          cp data/districts.csv dist/engine/data/
+          ls -R dist/engine
+
+      - name: Test the C# client (CITADELS_ENGINE_DIR makes it play the real engine)
+        env:
+          CITADELS_ENGINE_DIR: ${{ github.workspace }}/dist/engine
+        run: dotnet test gui/Citadels.Gui.sln -c Release
+
+      - name: Publish the GUI
+        run: >
+          dotnet publish gui/Citadels.App/Citadels.App.csproj
+          -c Release -r ${{ matrix.rid }} --self-contained true -o dist/Citadels
+
+      - name: Add the engine to the GUI folder
+        run: cp -R dist/engine dist/Citadels/engine
+
+      - name: Make the archive (Windows)
+        if: runner.os == 'Windows'
+        run: |
+          cd dist
+          7z a -tzip "../${{ matrix.archive }}" Citadels
+
+      - name: Make the archive (macOS)
+        if: runner.os != 'Windows'
+        run: tar -czf "${{ matrix.archive }}" -C dist Citadels
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.archive }}
+          path: ${{ matrix.archive }}
+
+  # Pushing a tag such as v1.0 attaches the archives to a GitHub release.
+  release:
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: archives
+          merge-multiple: true
+      - uses: softprops/action-gh-release@v2
+        with:
+          files: archives/*

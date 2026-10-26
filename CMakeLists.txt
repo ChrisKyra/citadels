@@ -12,7 +12,13 @@ endif()
 
 # Shared warning flags
 add_library(project_warnings INTERFACE)
-target_compile_options(project_warnings INTERFACE -Wall -Wextra -Wpedantic)
+if(MSVC)
+  # /W4 is the Visual Studio counterpart of -Wall -Wextra; /utf-8 reads source files and string
+  # literals as UTF-8 (the GUI protocol carries UTF-8 text).
+  target_compile_options(project_warnings INTERFACE /W4 /utf-8)
+else()
+  target_compile_options(project_warnings INTERFACE -Wall -Wextra -Wpedantic)
+endif()
 
 # Sanitizers (Debug builds, GCC/Clang only)
 set(SANITIZER "address" CACHE STRING "Sanitizer to use: address, thread, none")
@@ -53,6 +59,7 @@ add_library(citadels_core
   src/cpp/character_deck.cpp
   src/cpp/scripted_ui.cpp
   src/cpp/console_ui.cpp
+  src/cpp/protocol_ui.cpp
   src/cpp/game_state.cpp
   src/cpp/turn.cpp
   src/cpp/character_draft.cpp
@@ -107,6 +114,7 @@ add_executable(tests
   tests/test_user_interface.cpp
   tests/test_scripted_ui.cpp
   tests/test_console_ui.cpp
+  tests/test_protocol_ui.cpp
   tests/test_game_state.cpp
   tests/test_turn_context.cpp
   tests/test_character_hooks.cpp

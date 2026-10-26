@@ -1,0 +1,284 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ctl="using:Citadels.App.Controls"
+             x:Class="Citadels.App.Views.GameView">
+
+  <Grid>
+
+    <!-- ================================ THE TABLE ================================ -->
+    <Grid RowDefinitions="Auto,*" Margin="24,16,24,20">
+
+      <!-- Top bar: wordmark, round, crown, who is playing -->
+      <Grid Grid.Row="0" ColumnDefinitions="Auto,*,Auto" Margin="0,0,0,16">
+        <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="10" VerticalAlignment="Center">
+          <ctl:GameIcon Data="{x:Static ctl:Icons.Castle}" Foreground="{StaticResource GoldSolidBrush}" Width="26" Height="26" />
+          <TextBlock Classes="wordmark" Text="CITADELS" FontSize="24" VerticalAlignment="Center" />
+        </StackPanel>
+
+        <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="10" VerticalAlignment="Center">
+          <Border Classes="pill">
+            <StackPanel Orientation="Horizontal" Spacing="8">
+              <ctl:GameIcon Data="{x:Static ctl:Icons.Hourglass}" Foreground="{StaticResource GoldTextBrush}" Width="15" Height="15" VerticalAlignment="Center" />
+              <TextBlock Text="{Binding RoundText}" FontSize="13" Classes="subtle" VerticalAlignment="Center" />
+            </StackPanel>
+          </Border>
+          <Border Classes="pill" IsVisible="{Binding HasRoundInfo}">
+            <StackPanel Orientation="Horizontal" Spacing="8">
+              <ctl:GameIcon Data="{x:Static ctl:Icons.EyeShield}" Foreground="{StaticResource GoldTextBrush}" Width="15" Height="15" VerticalAlignment="Center" />
+              <TextBlock Text="{Binding RoundInfo}" FontSize="13" Classes="subtle" VerticalAlignment="Center" />
+            </StackPanel>
+          </Border>
+          <Border Classes="pill" IsVisible="{Binding HasCrownText}">
+            <StackPanel Orientation="Horizontal" Spacing="8">
+              <ctl:GameIcon Data="{x:Static ctl:Icons.Crown}" Foreground="{StaticResource GoldTextBrush}" Width="16" Height="16" VerticalAlignment="Center" />
+              <TextBlock Text="{Binding CrownText}" FontSize="13" Classes="subtle" VerticalAlignment="Center" />
+            </StackPanel>
+          </Border>
+          <Border Classes="pill" IsVisible="{Binding HasTurn}" BorderBrush="#66F2C14E">
+            <StackPanel Orientation="Horizontal" Spacing="8">
+              <ctl:GameIcon Data="{Binding TurnIcon}" Foreground="{StaticResource GoldSolidBrush}" Width="16" Height="16" VerticalAlignment="Center" />
+              <TextBlock Text="{Binding TurnText}" FontSize="13" FontWeight="SemiBold" VerticalAlignment="Center" />
+            </StackPanel>
+          </Border>
+        </StackPanel>
+      </Grid>
+
+      <Grid Grid.Row="1" ColumnDefinitions="*,370">
+
+        <!-- Left: the cities and your hand -->
+        <Grid Grid.Column="0" RowDefinitions="*,Auto" Margin="0,0,18,0">
+
+          <ScrollViewer Grid.Row="0" VerticalScrollBarVisibility="Auto" Padding="0,0,6,0">
+            <ItemsControl ItemsSource="{Binding Players}">
+              <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                  <UniformGrid Columns="2" />
+                </ItemsPanelTemplate>
+              </ItemsControl.ItemsPanel>
+              <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                  <Border Classes="glass player" Classes.active="{Binding IsActive}" Margin="0,0,14,14" Padding="16,14">
+                    <StackPanel Spacing="10">
+
+                      <Grid ColumnDefinitions="Auto,*">
+                        <Border Grid.Column="0" Width="42" Height="42" CornerRadius="21" Background="{Binding SeatBrush}"
+                                BoxShadow="0 4 14 -4 #AA000000" VerticalAlignment="Center">
+                          <TextBlock Text="{Binding Initial}" FontWeight="Bold" FontSize="18" Foreground="#0B1020"
+                                     HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                        <StackPanel Grid.Column="1" Margin="12,0,0,0" Spacing="4" VerticalAlignment="Center">
+                          <StackPanel Orientation="Horizontal" Spacing="8">
+                            <TextBlock Text="{Binding Name}" FontSize="16" FontWeight="SemiBold" VerticalAlignment="Center" />
+                            <Border Classes="crownBadge" IsVisible="{Binding HasCrown}">
+                              <StackPanel Orientation="Horizontal" Spacing="4">
+                                <ctl:GameIcon Data="{x:Static ctl:Icons.Crown}" Foreground="{StaticResource GoldInkBrush}" Width="12" Height="12" VerticalAlignment="Center" />
+                                <TextBlock Text="Crown" FontSize="11" FontWeight="Bold" Foreground="{StaticResource GoldInkBrush}" VerticalAlignment="Center" />
+                              </StackPanel>
+                            </Border>
+                          </StackPanel>
+                          <StackPanel Orientation="Horizontal" Spacing="16">
+                            <StackPanel Orientation="Horizontal" Spacing="5" ToolTip.Tip="Gold">
+                              <ctl:GameIcon Data="{x:Static ctl:Icons.CrownCoin}" Foreground="{StaticResource GoldTextBrush}" Width="14" Height="14" VerticalAlignment="Center" />
+                              <TextBlock Text="{Binding Gold}" FontSize="13" Classes="subtle" VerticalAlignment="Center" />
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Spacing="5" ToolTip.Tip="Cards in hand">
+                              <ctl:GameIcon Data="{x:Static ctl:Icons.Cards}" Foreground="{StaticResource MutedTextBrush}" Width="14" Height="14" VerticalAlignment="Center" />
+                              <TextBlock Text="{Binding HandSize}" FontSize="13" Classes="subtle" VerticalAlignment="Center" />
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Spacing="5" ToolTip.Tip="Districts built (8 complete the city)">
+                              <ctl:GameIcon Data="{x:Static ctl:Icons.Village}" Foreground="{StaticResource MutedTextBrush}" Width="15" Height="15" VerticalAlignment="Center" />
+                              <TextBlock Text="{Binding DistrictText}" FontSize="13" Classes="subtle" VerticalAlignment="Center" />
+                            </StackPanel>
+                          </StackPanel>
+                        </StackPanel>
+                      </Grid>
+
+                      <ProgressBar Classes="city" Minimum="0" Maximum="8" Value="{Binding DistrictCount}" />
+
+                      <Panel MinHeight="100">
+                        <ItemsControl ItemsSource="{Binding City}">
+                          <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                              <WrapPanel />
+                            </ItemsPanelTemplate>
+                          </ItemsControl.ItemsPanel>
+                        </ItemsControl>
+                        <TextBlock Text="No districts built yet" Classes="muted" FontSize="12"
+                                   VerticalAlignment="Center" IsVisible="{Binding IsCityEmpty}" />
+                      </Panel>
+
+                    </StackPanel>
+                  </Border>
+                </DataTemplate>
+              </ItemsControl.ItemTemplate>
+            </ItemsControl>
+          </ScrollViewer>
+
+          <!-- Your hand -->
+          <Border Grid.Row="1" Classes="glass" IsVisible="{Binding ShowHand}" Padding="18,14" Margin="0,4,14,0">
+            <StackPanel Spacing="12">
+              <Grid ColumnDefinitions="*,Auto">
+                <TextBlock Grid.Column="0" Classes="display" Text="{Binding HandTitle}" FontSize="16"
+                           Foreground="{StaticResource GoldTextBrush}" VerticalAlignment="Center" />
+                <Border Grid.Column="1" Classes="pill" Padding="12,5">
+                  <StackPanel Orientation="Horizontal" Spacing="6">
+                    <ctl:GameIcon Data="{x:Static ctl:Icons.CrownCoin}" Foreground="{StaticResource GoldTextBrush}" Width="15" Height="15" VerticalAlignment="Center" />
+                    <TextBlock Text="{Binding HandGold}" FontSize="13" FontWeight="SemiBold" VerticalAlignment="Center" />
+                  </StackPanel>
+                </Border>
+              </Grid>
+              <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
+                <ItemsControl ItemsSource="{Binding Hand}" Margin="0,10,0,0">
+                  <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                      <StackPanel Orientation="Horizontal" />
+                    </ItemsPanelTemplate>
+                  </ItemsControl.ItemsPanel>
+                </ItemsControl>
+              </ScrollViewer>
+            </StackPanel>
+          </Border>
+        </Grid>
+
+        <!-- Right: the question and the chronicle -->
+        <Grid Grid.Column="1" RowDefinitions="Auto,*">
+
+          <!-- A question waits for an answer -->
+          <Border Grid.Row="0" Classes="glass question" IsVisible="{Binding HasQuestion}" Padding="20,18" Margin="0,0,0,14">
+            <StackPanel Spacing="6">
+              <TextBlock Classes="eyebrow" Text="{Binding QuestionEyebrow}" />
+              <TextBlock Classes="display" Text="{Binding QuestionPrompt}" FontSize="20" TextWrapping="Wrap" Margin="0,0,0,10" />
+
+              <ScrollViewer MaxHeight="420" VerticalScrollBarVisibility="Auto" IsVisible="{Binding ShowChoices}">
+                <ItemsControl ItemsSource="{Binding Options}">
+                  <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                      <Button Classes="option" Classes.muted="{Binding IsMuted}" Command="{Binding Command}" Margin="0,0,0,8">
+                        <StackPanel Orientation="Horizontal" Spacing="12">
+                          <ctl:GameIcon Data="{Binding Icon}" Foreground="{Binding Accent}" Width="22" Height="22"
+                                        IsVisible="{Binding HasIcon}" VerticalAlignment="Center" />
+                          <TextBlock Text="{Binding Text}" TextWrapping="Wrap" VerticalAlignment="Center" />
+                        </StackPanel>
+                      </Button>
+                    </DataTemplate>
+                  </ItemsControl.ItemTemplate>
+                </ItemsControl>
+              </ScrollViewer>
+
+              <Grid ColumnDefinitions="*,12,*" IsVisible="{Binding ShowConfirm}">
+                <Button Grid.Column="0" Classes="gold" Content="Yes" Command="{Binding YesCommand}" HorizontalAlignment="Stretch" />
+                <Button Grid.Column="2" Classes="option" Content="No" Command="{Binding NoCommand}" HorizontalContentAlignment="Center" />
+              </Grid>
+            </StackPanel>
+          </Border>
+
+          <!-- Nothing to decide right now -->
+          <Border Grid.Row="0" Classes="glass" IsVisible="{Binding IsWaiting}" Padding="20,18" Margin="0,0,0,14">
+            <StackPanel Orientation="Horizontal" Spacing="12">
+              <ctl:GameIcon Data="{x:Static ctl:Icons.Hourglass}" Foreground="{StaticResource MutedTextBrush}" Width="20" Height="20" VerticalAlignment="Center" />
+              <TextBlock Text="The game is thinking..." Classes="muted" FontSize="14" VerticalAlignment="Center" />
+            </StackPanel>
+          </Border>
+
+          <!-- The chronicle: what happened since the computer was passed on -->
+          <Border Grid.Row="1" Classes="glass" Padding="18,16">
+            <Grid RowDefinitions="Auto,*">
+              <StackPanel Grid.Row="0" Orientation="Horizontal" Spacing="8" Margin="0,0,0,12">
+                <ctl:GameIcon Data="{x:Static ctl:Icons.Scroll}" Foreground="{StaticResource MutedTextBrush}" Width="15" Height="15" VerticalAlignment="Center" />
+                <TextBlock Classes="eyebrow" Text="CHRONICLE" Foreground="{StaticResource MutedTextBrush}" VerticalAlignment="Center" />
+              </StackPanel>
+              <ScrollViewer Grid.Row="1" x:Name="LogScroll" VerticalScrollBarVisibility="Auto">
+                <ItemsControl ItemsSource="{Binding Log}">
+                  <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                      <Grid ColumnDefinitions="Auto,*" Margin="0,0,0,10">
+                        <Ellipse Grid.Column="0" Width="7" Height="7" Fill="{StaticResource GoldSolidBrush}"
+                                 VerticalAlignment="Top" Margin="0,6,12,0" />
+                        <TextBlock Grid.Column="1" Text="{Binding}" TextWrapping="Wrap" FontSize="13" Classes="subtle" />
+                      </Grid>
+                    </DataTemplate>
+                  </ItemsControl.ItemTemplate>
+                </ItemsControl>
+              </ScrollViewer>
+            </Grid>
+          </Border>
+        </Grid>
+      </Grid>
+    </Grid>
+
+    <!-- ======================= PASS THE COMPUTER (covers everything) ======================= -->
+    <Border Classes="overlay" IsVisible="{Binding IsHandOff}" Background="{StaticResource OverlayBrush}">
+      <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Spacing="18" MaxWidth="640">
+        <ctl:GameIcon Data="{x:Static ctl:Icons.EyeShield}" Foreground="{StaticResource GoldSolidBrush}"
+                      Width="72" Height="72" HorizontalAlignment="Center" Opacity="0.9" />
+        <TextBlock Classes="eyebrow" Text="PASS THE COMPUTER TO" HorizontalAlignment="Center" FontSize="13" />
+        <StackPanel Orientation="Horizontal" Spacing="18" HorizontalAlignment="Center">
+          <Border Width="76" Height="76" CornerRadius="38" Background="{Binding HandOffBrush}"
+                  BoxShadow="0 10 30 -6 #AA000000" VerticalAlignment="Center">
+            <TextBlock Text="{Binding HandOffInitial}" FontSize="34" FontWeight="Bold" Foreground="#0B1020"
+                       HorizontalAlignment="Center" VerticalAlignment="Center" />
+          </Border>
+          <TextBlock Classes="display" Text="{Binding HandOffName}" FontSize="46" VerticalAlignment="Center"
+                     TextWrapping="Wrap" MaxWidth="480" />
+        </StackPanel>
+        <TextBlock Text="Everybody else, look away. Your cards stay hidden until you are ready."
+                   Classes="subtle" FontSize="14" HorizontalAlignment="Center" TextAlignment="Center" TextWrapping="Wrap" />
+        <Button Classes="gold" Command="{Binding ReadyCommand}" HorizontalAlignment="Center" Padding="44,14" Margin="0,10,0,0">
+          <TextBlock Text="I'm ready" FontSize="17" FontWeight="Bold" />
+        </Button>
+      </StackPanel>
+    </Border>
+
+    <!-- ============================ GAME OVER / ERROR ============================ -->
+    <Border Classes="overlay" IsVisible="{Binding IsFinished}" Background="{StaticResource OverlayBrush}">
+      <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Spacing="16" Width="620" Margin="0,40">
+          <ctl:GameIcon Data="{x:Static ctl:Icons.Laurels}" Foreground="{StaticResource GoldSolidBrush}"
+                        Width="84" Height="84" HorizontalAlignment="Center" IsVisible="{Binding IsVictory}" />
+          <ctl:GameIcon Data="{x:Static ctl:Icons.TowerFall}" Foreground="#FF8A8A"
+                        Width="72" Height="72" HorizontalAlignment="Center" IsVisible="{Binding IsError}" />
+          <TextBlock Classes="eyebrow" Text="GAME OVER" HorizontalAlignment="Center" FontSize="13" IsVisible="{Binding IsVictory}" />
+          <TextBlock Classes="wordmark" Text="{Binding FinishTitle}" FontSize="40" LetterSpacing="1"
+                     HorizontalAlignment="Center" TextAlignment="Center" TextWrapping="Wrap" />
+          <TextBlock Text="{Binding FinishSubtitle}" Classes="subtle" FontSize="14" HorizontalAlignment="Center" />
+
+          <ItemsControl ItemsSource="{Binding ScoreRows}" Margin="0,12,0,0">
+            <ItemsControl.ItemTemplate>
+              <DataTemplate>
+                <Border Classes="glass player" Classes.active="{Binding IsWinner}" Padding="16,12" Margin="0,0,0,10">
+                  <Grid ColumnDefinitions="Auto,*,Auto">
+                    <Border Grid.Column="0" Width="36" Height="36" CornerRadius="18" Background="{Binding Accent}"
+                            IsVisible="{Binding HasRank}" Margin="0,0,14,0" VerticalAlignment="Center">
+                      <TextBlock Text="{Binding Rank}" FontWeight="Bold" FontSize="16" Foreground="#0B1020"
+                                 HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    </Border>
+                    <StackPanel Grid.Column="1" Spacing="3" VerticalAlignment="Center">
+                      <TextBlock Text="{Binding Name}" FontSize="16" FontWeight="SemiBold" TextWrapping="Wrap" />
+                      <TextBlock Text="{Binding Details}" FontSize="12" Classes="muted" TextWrapping="Wrap"
+                                 IsVisible="{Binding HasRank}" />
+                    </StackPanel>
+                    <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="5" VerticalAlignment="Center"
+                                IsVisible="{Binding HasRank}" Margin="14,0,0,0">
+                      <TextBlock Classes="display" Text="{Binding Points}" FontSize="26"
+                                 Foreground="{StaticResource GoldTextBrush}" VerticalAlignment="Center" />
+                      <TextBlock Text="pts" Classes="muted" FontSize="12" VerticalAlignment="Bottom" Margin="0,0,0,5" />
+                    </StackPanel>
+                  </Grid>
+                </Border>
+              </DataTemplate>
+            </ItemsControl.ItemTemplate>
+          </ItemsControl>
+
+          <Button Classes="gold" Command="{Binding NewGameCommand}" HorizontalAlignment="Center" Padding="40,13" Margin="0,8,0,0">
+            <StackPanel Orientation="Horizontal" Spacing="10">
+              <ctl:GameIcon Data="{x:Static ctl:Icons.Castle}" Foreground="{StaticResource GoldInkBrush}" Width="18" Height="18" VerticalAlignment="Center" />
+              <TextBlock Text="New game" FontSize="16" FontWeight="Bold" VerticalAlignment="Center" />
+            </StackPanel>
+          </Button>
+        </StackPanel>
+      </ScrollViewer>
+    </Border>
+
+  </Grid>
+
+</UserControl>

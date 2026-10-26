@@ -9,3 +9,9 @@ citadelsrules.pdf
 
 # macOS
 .DS_Store
+
+# GUI (C#)
+gui/**/bin/
+gui/**/obj/
+*.user
+.vs/

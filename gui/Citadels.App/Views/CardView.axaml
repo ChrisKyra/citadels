@@ -1,0 +1,41 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ctl="using:Citadels.App.Controls"
+             x:Class="Citadels.App.Views.CardView">
+
+  <Border Classes="card"
+          Width="{Binding Width}" Height="{Binding Height}"
+          Margin="0,0,8,8"
+          CornerRadius="{Binding Corner}"
+          Background="{Binding Fill}"
+          BoxShadow="{Binding Glow}"
+          ClipToBounds="True"
+          ToolTip.Tip="{Binding ToolTipText}">
+    <Grid>
+      <!-- a light edge at the top, like the rim of a real card -->
+      <Border Height="1" VerticalAlignment="Top" Background="#55FFFFFF" />
+
+      <!-- the district's icon as a watermark -->
+      <ctl:GameIcon Data="{Binding Icon}" Foreground="{Binding Ink}" Opacity="0.3"
+                    Width="{Binding IconSize}" Height="{Binding IconSize}"
+                    HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,14" />
+
+      <!-- cost in a gold gem -->
+      <Border HorizontalAlignment="Left" VerticalAlignment="Top" Margin="{Binding GemMargin}"
+              Width="{Binding GemSize}" Height="{Binding GemSize}" CornerRadius="{Binding GemCorner}"
+              Background="{StaticResource GemBrush}" BoxShadow="0 2 6 0 #77000000">
+        <TextBlock Text="{Binding Cost}" FontSize="{Binding GemFontSize}" FontWeight="Bold"
+                   Foreground="#2A1C05" HorizontalAlignment="Center" VerticalAlignment="Center" />
+      </Border>
+
+      <!-- purple districts with a special ability get a sparkle -->
+      <ctl:GameIcon IsVisible="{Binding HasAbility}" Data="{x:Static ctl:Icons.Sparkles}" Foreground="White"
+                    Width="16" Height="16" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,7,7,0" />
+
+      <TextBlock Classes="display" Text="{Binding Name}" FontSize="{Binding NameFontSize}"
+                 Foreground="{Binding Ink}" TextAlignment="Center" TextWrapping="Wrap"
+                 VerticalAlignment="Bottom" Margin="{Binding NameMargin}" />
+    </Grid>
+  </Border>
+
+</UserControl>
