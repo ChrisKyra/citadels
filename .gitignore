@@ -1,0 +1,11 @@
+# Build output
+build/
+
+# Not part of the playable game
+tests/
+citadelsrules.pdf
+.vscode/
+*.code-workspace
+
+# macOS
+.DS_Store

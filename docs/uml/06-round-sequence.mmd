@@ -1,0 +1,44 @@
+sequenceDiagram
+  autonumber
+  participant G as Game
+  participant R as Round
+  participant D as CharacterDraft
+  participant UI as ConsoleUI
+  participant T as Turn
+  participant C as Character
+  participant P as Player
+
+  G->>R: play()
+  R->>R: removeCharacters()
+  R->>D: run(state, roundState, ui)
+  loop each pick, from Crown holder to the left
+    D->>UI: handOff(picker)
+    D->>UI: choose(remaining characters)
+    UI-->>D: CharacterId
+    D->>P: characters.push_back(id)
+  end
+  loop rank 1 to 8
+    R->>R: ownerOf(rank)
+    alt not in play, or murdered
+      R->>UI: announce(no one answers)
+    else revealed
+      R->>UI: handOff(owner)
+      opt rank was robbed
+        R->>P: move all gold to the Thief
+      end
+      R->>C: onReveal(ctx)
+      R->>T: play()
+      T->>UI: choose(gold or cards)
+      T->>P: gold += 2, or keep 1 of 2 cards
+      T->>C: afterAction(ctx)
+      loop until End turn
+        T->>UI: choose(build, power, income, end)
+        T->>P: build(handIndex)
+        T->>C: usePower(ctx) or collectIncome(ctx)
+      end
+      T->>C: atEndOfTurn(ctx)
+    end
+  end
+  R->>R: endRound()
+  R-->>G: round finished
+  G->>G: endTriggered()?

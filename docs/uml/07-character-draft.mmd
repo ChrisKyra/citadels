@@ -1,0 +1,16 @@
+flowchart TD
+  S(["CharacterDraft.run()"]) --> SH["Shuffle the 8 character cards"]
+  SH --> FD["Place 1 random card face-down"]
+  FD --> N{"How many players?"}
+  N -- "4" --> U2["Place 2 cards face-up"]
+  N -- "5" --> U1["Place 1 card face-up"]
+  N -- "2, 3, 6 or 7" --> PICK
+  U2 --> K{"Is the King face-up?"}
+  U1 --> K
+  K -- yes --> KR["Replace it with a new random card<br/>shuffle the King back"] --> K
+  K -- no --> PICK{"Which draft strategy?"}
+
+  PICK -- "StandardDraft (4 to 6)" --> P1["Crown holder picks 1, passes left<br/>until everyone has 1<br/>last card goes face-down"]
+  PICK -- "SevenPlayerDraft (7)" --> P7["Same as standard, but the 7th player<br/>may pick the face-down card instead<br/>and puts the other one face-down"]
+  PICK -- "ThreePlayerDraft (3)" --> P3["Go around twice, each picks 2<br/>last player picks 1 of the final 2<br/>and puts the other face-down"]
+  PICK -- "TwoPlayerDraft (2)" --> P2["A picks 1<br/>B picks 1, discards 1 face-down<br/>A picks 1, discards 1 face-down<br/>B picks 1, last card face-down"]

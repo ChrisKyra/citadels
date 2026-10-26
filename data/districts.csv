@@ -1,0 +1,32 @@
+name,color,cost,copies,ability
+Manor,noble,3,5,
+Castle,noble,4,4,
+Palace,noble,5,3,
+Temple,religious,1,3,
+Church,religious,2,3,
+Monastery,religious,3,3,
+Cathedral,religious,5,2,
+Tavern,trade,1,5,
+Market,trade,2,4,
+Trading Post,trade,2,3,
+Docks,trade,3,3,
+Harbor,trade,4,3,
+Town Hall,trade,5,2,
+Watchtower,military,1,3,
+Prison,military,2,3,
+Barracks,military,3,3,
+Fortress,military,5,2,
+Dragon Gate,special,6,1,dragon_gate
+Factory,special,6,1,factory
+Haunted Quarter,special,2,1,haunted_quarter
+Imperial Treasury,special,5,1,imperial_treasury
+Keep,special,3,1,keep
+Laboratory,special,5,1,laboratory
+Library,special,6,1,library
+Map Room,special,5,1,map_room
+Quarry,special,5,1,quarry
+School of Magic,special,6,1,school_of_magic
+Smithy,special,5,1,smithy
+Thieves' Den,special,6,1,thieves_den
+Wishing Well,special,5,1,wishing_well
+Statue,special,3,1,statue

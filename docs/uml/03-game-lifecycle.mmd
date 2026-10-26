@@ -1,0 +1,29 @@
+stateDiagram-v2
+  [*] --> Setup
+  Setup : Load districts, shuffle both decks
+  Setup : Deal 4 district cards and 2 gold to each player
+  Setup : Give the Crown to the starting player
+
+  state "Round N" as Round {
+    [*] --> RemoveCharacters
+    RemoveCharacters : 1 random card face-down
+    RemoveCharacters : 0 to 2 cards face-up (never the King)
+    RemoveCharacters --> ChooseCharacters
+    ChooseCharacters : Crown holder picks first, then pass to the left
+    ChooseCharacters --> CallCharacters
+    CallCharacters : Call ranks 1 to 8, one Turn per revealed character
+    CallCharacters --> EndOfRound
+    EndOfRound : Murdered King's owner takes the Crown
+    EndOfRound : Return all characters, reset RoundState
+    EndOfRound --> [*]
+  }
+
+  Setup --> Round
+  state endCheck <<choice>>
+  Round --> endCheck
+  endCheck --> Round : no city has 8 districts
+  endCheck --> Scoring : endTriggered
+  Scoring : ScoreCalculator ranks all players
+  Scoring --> GameOver
+  GameOver : Print scoreboard and winner
+  GameOver --> [*]

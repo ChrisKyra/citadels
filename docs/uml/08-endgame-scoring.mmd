@@ -1,0 +1,24 @@
+flowchart TD
+  subgraph During["During a turn"]
+    B["Player builds a district"] --> Q{"city.size >= districtsToFinish?"}
+    Q -- no --> C["Continue the turn"]
+    Q -- yes --> F{"firstToComplete already set?"}
+    F -- no --> F1["firstToComplete = this player<br/>endTriggered = true"] --> C
+    F -- yes --> C
+  end
+
+  subgraph After["After endRound()"]
+    E{"endTriggered?"}
+    E -- no --> NR["Start the next round"]
+    E -- yes --> S["ScoreCalculator.score(player)<br/>for every player"]
+    S --> S1["+ sum of district costs in the city"]
+    S1 --> S2["+3 if the city has all five colors"]
+    S2 --> S3{"Completed city?"}
+    S3 -- "first to complete" --> S4["+4"]
+    S3 -- "completed later" --> S5["+2"]
+    S3 -- "not completed" --> W
+    S4 --> W["Sort by total, announce the winner"]
+    S5 --> W
+  end
+
+  C -. "round keeps going until rank 8 is called" .-> E

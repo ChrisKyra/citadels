@@ -1,0 +1,201 @@
+classDiagram
+direction LR
+
+class Game {
+  -GameConfig config
+  -GameState state
+  -IUserInterface& ui
+  -Random rng
+  +run() void
+  -setup() void
+  -playRound() void
+  -finish() void
+}
+
+class GameConfig {
+  +int playerCount
+  +vector~string~ playerNames
+  +int districtsToFinish
+  +vector~CharacterId~ characterSet
+  +string districtDataFile
+  +uint32 seed
+}
+
+class GameState {
+  +vector~Player~ players
+  +CharacterDeck characters
+  +Deck~DistrictCard~ districtDeck
+  +Bank bank
+  +int crownHolder
+  +int roundNumber
+  +optional~int~ firstToComplete
+  +leftOf(int seat) int
+  +endTriggered() bool
+}
+
+class Round {
+  -GameState& state
+  -IUserInterface& ui
+  -RoundState rs
+  -CharacterDraft draft
+  +play() void
+  -removeCharacters() void
+  -chooseCharacters() void
+  -callCharacters() void
+  -endRound() void
+}
+
+class RoundState {
+  +vector~CharacterId~ faceDown
+  +vector~CharacterId~ faceUp
+  +array~int~ ownerByRank
+  +optional~CharacterId~ murdered
+  +optional~CharacterId~ robbed
+  +optional~int~ thiefSeat
+  +ownerOf(CharacterId id) optional~int~
+}
+
+class CharacterDraft {
+  <<abstract>>
+  +faceUpCount(int players) int
+  +run(GameState&, RoundState&, IUserInterface&) void
+  +create(int players)$ DraftPtr
+}
+class StandardDraft
+class SevenPlayerDraft
+class ThreePlayerDraft
+class TwoPlayerDraft
+
+class Turn {
+  -TurnContext ctx
+  +play() void
+  -takeAction() void
+  -mainPhase() void
+  -endOfTurn() void
+}
+
+class TurnContext {
+  +GameState& state
+  +RoundState& round
+  +IUserInterface& ui
+  +Player& player
+  +Character& character
+  +bool actionTaken
+  +bool powerUsed
+  +bool incomeTaken
+  +int buildsLeft
+}
+
+class Player {
+  +string name
+  +int seat
+  +int gold
+  +Hand hand
+  +City city
+  +vector~CharacterId~ characters
+  +canBuild(DistrictCard card) bool
+  +build(int handIndex) void
+}
+
+class City {
+  -vector~DistrictCard~ districts
+  +size() int
+  +contains(string name) bool
+  +countColor(DistrictColor c) int
+  +hasAllColors() bool
+  +remove(int index) DistrictCard
+  +isComplete(int target) bool
+}
+
+class Hand {
+  -vector~DistrictCard~ cards
+  +add(DistrictCard card) void
+  +take(int index) DistrictCard
+  +swapWith(Hand other) void
+}
+
+class DistrictCard {
+  +string name
+  +int cost
+  +DistrictColor color
+  +AbilityPtr ability
+  +scoreValue() int
+}
+
+class DistrictAbility {
+  <<interface>>
+  +scoreBonus(City city) int
+  +canBeDestroyed() bool
+  +destroyCostModifier() int
+}
+
+class Deck~T~ {
+  -deque~T~ cards
+  +shuffle(Random rng) void
+  +draw() optional~T~
+  +putBottom(T card) void
+  +size() int
+}
+
+class CharacterDeck {
+  -vector~CharacterPtr~ pool
+  +ids() vector~CharacterId~
+  +get(CharacterId id) Character
+}
+
+class Bank {
+  +payTo(Player p, int n) void
+  +collectFrom(Player p, int n) void
+}
+
+class ScoreCalculator {
+  +score(Player p, GameState s) ScoreBreakdown
+  +ranking(GameState s) vector~ScoreBreakdown~
+}
+
+class IUserInterface {
+  <<interface>>
+  +announce(string msg) void
+  +handOff(Player p) void
+  +showTable(GameState s) void
+  +showPrivate(Player p) void
+  +choose(string prompt, vector~string~ options) int
+  +confirm(string prompt) bool
+}
+class ConsoleUI
+
+class CardLoader {
+  +loadDistricts(string path)$ vector~DistrictCard~
+}
+
+class Character {
+  <<abstract>>
+}
+
+Game *-- GameConfig
+Game *-- GameState
+Game --> IUserInterface
+Game ..> Round : creates one per round
+Game ..> ScoreCalculator : at game end
+Game ..> CardLoader : setup
+GameState *-- "2..7" Player
+GameState *-- CharacterDeck
+GameState *-- Deck
+GameState *-- Bank
+Round *-- RoundState
+Round *-- CharacterDraft
+Round ..> Turn : one per revealed character
+CharacterDraft <|-- StandardDraft
+StandardDraft <|-- SevenPlayerDraft
+CharacterDraft <|-- ThreePlayerDraft
+CharacterDraft <|-- TwoPlayerDraft
+Turn *-- TurnContext
+TurnContext --> Player
+TurnContext --> Character
+Player *-- Hand
+Player *-- City
+Hand o-- DistrictCard
+City o-- DistrictCard
+DistrictCard --> DistrictAbility
+CharacterDeck *-- "8" Character
+IUserInterface <|.. ConsoleUI

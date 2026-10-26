@@ -1,0 +1,23 @@
+flowchart TD
+  S(["Turn starts"]) --> M1{"Menu before action"}
+  M1 -- "Take 2 gold" --> A1["gold += 2"]
+  M1 -- "Draw 2 cards" --> A2["Draw 2, keep 1,<br/>other to bottom of deck"]
+  M1 -- "Use power" --> P1["character.usePower(ctx)<br/>once per turn"] --> M1
+  M1 -- "Collect income" --> I1["character.collectIncome(ctx)<br/>once per turn"] --> M1
+  M1 -- "View table or hand" --> V1["ui.showTable / showPrivate"] --> M1
+
+  A1 --> AA["actionTaken = true<br/>character.afterAction(ctx)<br/>Merchant +1 gold, Architect +2 cards"]
+  A2 --> AA
+  AA --> M2{"Menu after action"}
+
+  M2 -- "Build district" --> B1{"buildsLeft > 0<br/>and enough gold<br/>and not a duplicate?"}
+  B1 -- no --> M2
+  B1 -- yes --> B2["Pay cost to bank<br/>move card from hand to city<br/>buildsLeft -= 1"]
+  B2 --> C1{"city.size reaches target<br/>and firstToComplete is empty?"}
+  C1 -- yes --> C2["firstToComplete = player<br/>endTriggered = true"] --> M2
+  C1 -- no --> M2
+
+  M2 -- "Use power" --> P2["character.usePower(ctx)"] --> M2
+  M2 -- "Collect income" --> I2["character.collectIncome(ctx)"] --> M2
+  M2 -- "End turn" --> E1["character.atEndOfTurn(ctx)<br/>Warlord may destroy one district"]
+  E1 --> E2(["Turn over"])

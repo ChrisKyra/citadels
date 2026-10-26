@@ -1,0 +1,81 @@
+classDiagram
+direction TB
+
+class CharacterId {
+  <<enumeration>>
+  Assassin = 1
+  Thief = 2
+  Magician = 3
+  King = 4
+  Bishop = 5
+  Merchant = 6
+  Architect = 7
+  Warlord = 8
+}
+
+class DistrictColor {
+  <<enumeration>>
+  Noble
+  Religious
+  Trade
+  Military
+  Special
+}
+
+class Character {
+  <<abstract>>
+  +CharacterId id
+  +string name
+  +int rank
+  +optional~DistrictColor~ incomeColor
+  +collectIncome(TurnContext ctx) void
+  +onReveal(TurnContext ctx) void
+  +afterAction(TurnContext ctx) void
+  +buildLimit() int
+  +hasPower() bool
+  +usePower(TurnContext ctx) void
+  +atEndOfTurn(TurnContext ctx) void
+  +protectsCity() bool
+}
+
+class Assassin {
+  +usePower(TurnContext ctx) void
+}
+class Thief {
+  +usePower(TurnContext ctx) void
+}
+class Magician {
+  +usePower(TurnContext ctx) void
+}
+class King {
+  +onReveal(TurnContext ctx) void
+}
+class Bishop {
+  +protectsCity() bool
+}
+class Merchant {
+  +afterAction(TurnContext ctx) void
+}
+class Architect {
+  +afterAction(TurnContext ctx) void
+  +buildLimit() int
+}
+class Warlord {
+  +atEndOfTurn(TurnContext ctx) void
+}
+
+class CharacterFactory {
+  +create(CharacterId id)$ CharacterPtr
+}
+
+Character <|-- Assassin
+Character <|-- Thief
+Character <|-- Magician
+Character <|-- King
+Character <|-- Bishop
+Character <|-- Merchant
+Character <|-- Architect
+Character <|-- Warlord
+Character --> CharacterId
+Character --> DistrictColor
+CharacterFactory ..> Character : creates

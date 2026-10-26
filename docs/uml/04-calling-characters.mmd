@@ -1,0 +1,18 @@
+flowchart TD
+  A(["callCharacters: rank = 1"]) --> B{"Does any player<br/>own this rank?"}
+  B -- no --> N["Announce: no one answers"]
+  B -- yes --> C{"Is this rank<br/>the murdered one?"}
+  C -- yes --> N
+  C -- no --> H["handOff to owner<br/>owner reveals the character"]
+  H --> D{"Is this rank<br/>the robbed one?"}
+  D -- yes --> E["Thief takes all of<br/>the owner's gold"]
+  D -- no --> F
+  E --> F["character.onReveal(ctx)<br/>King takes the Crown now"]
+  F --> T[["Turn.play()"]]
+  T --> X
+  N --> X{"rank less than 8?"}
+  X -- yes --> I["rank = rank + 1"] --> B
+  X -- no --> K{"Was the King murdered<br/>and owned by someone?"}
+  K -- yes --> KH["King's owner takes the Crown<br/>as the King's heir"]
+  K -- no --> Z(["endRound()"])
+  KH --> Z
